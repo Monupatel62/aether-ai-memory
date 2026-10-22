@@ -8,7 +8,6 @@ Conversation/session memory abstractions, safe summarization, retrieval interfac
 
 ## Dependencies and connections
 
-Database, security, compatible @woho/memory.
 
 ## Owned capabilities
 
