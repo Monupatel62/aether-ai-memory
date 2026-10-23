@@ -55,7 +55,7 @@ test("fails closed when authorization denies", async () => {
 test("fails closed when a persistence adapter returns malformed records", async () => {
   const { service, records } = fixture();
   const created = await service.create({ principal, scope: "user", kind: "fact", content: "safe", retentionMs: 60_000 });
-  records.set(created.id, { id: created.id, tenantId: "tenant-a", ownerId: "user-1", content: "corrupt" });
+  records.set(created.id, { id: created.id, tenantId: "tenant-a", ownerId: "user-1", scope: "user", content: "corrupt" });
   await assert.rejects(service.get({ principal, memoryId: created.id }), (e) => e.code === "store_unavailable");
   await assert.rejects(service.list({ principal, scope: "user" }), (e) => e.code === "store_unavailable");
 });
