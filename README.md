@@ -1,35 +1,26 @@
 # aether-ai-memory
 
-**Status:** Documentation-only on the inspected `main` branch. No application implementation is present in the audited tree.
+**Status:** Initial scoped memory lifecycle service implemented on a feature branch. No production database or retention policy is configured.
 
-## Purpose
+## Implemented
 
-Conversation/session memory abstractions, safe summarization, scoped retrieval, retention, deletion, and tenant isolation.
+- [Memory service source](src/index.js): user/session-scoped memory, explicit bounded retention, tenant/owner isolation, authorization on create/read/list/delete, and expiration filtering.
+- [Unit tests](test/memory.test.js): scope validation, retention bounds, cross-user/tenant isolation, expiration, deletion, and authorization denial.
+- Dependency-free Node.js package with Node 20/22 CI.
 
-## Dependencies
+## Privacy and security limits
 
-aether-ai-database and aether-ai-security.
+- Retention must be explicitly supplied for each memory; the code does not define a final product retention policy.
+- No tenant-shared scope is supported by this initial baseline.
+- The store adapter must enforce tenant/owner scoping and durable deletion. Expired records are hidden but require a scheduled physical purge.
+- Encryption, export, audit, data-subject deletion propagation, semantic retrieval, and production deployment are not included.
 
 ## Documentation
 
 - [Repository specification](docs/REPOSITORY_SPECIFICATION.md)
-- [Master repository catalog](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/REPOSITORY_CATALOG.md)
-- [Master architecture](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/MASTER_ARCHITECTURE.md)
-
-## Project rules
-
-- No implementation starts until the documentation and cross-repository contracts are reviewed.
-- Do not commit secrets, credentials, or real user data.
-- Keep retention, deletion, access control, and privacy behavior documented and tested before persistence features are enabled.
-
-## Repository documents
-
 - [Project specification](docs/PROJECT_SPEC.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Dependencies and contracts](docs/DEPENDENCIES_AND_CONTRACTS.md)
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md)
-- [Research and licenses](docs/RESEARCH_AND_LICENSES.md)
-- [Technical design](docs/TECHNICAL_DESIGN.md)
 - [Security review](docs/SECURITY_REVIEW.md)
-- [Engineering standard](docs/ENGINEERING_STANDARD.md)
-- [Work log](docs/WORKLOG.md)
+- [Master catalog](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/REPOSITORY_CATALOG.md)
