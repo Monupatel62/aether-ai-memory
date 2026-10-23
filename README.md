@@ -1,6 +1,6 @@
 # aether-ai-memory
 
-**Status:** Documentation-only on the inspected `main` branch. No application implementation is present in the audited tree.
+**Status:** Initial memory record metadata validator is in review. No storage adapter, retrieval service, or production deletion lifecycle is implemented.
 
 ## Purpose
 
@@ -9,6 +9,10 @@ Conversation/session memory abstractions, safe summarization, scoped retrieval, 
 ## Dependencies
 
 aether-ai-database and aether-ai-security.
+
+## Initial implementation
+
+The draft package validates principal/session/tenant scope metadata, opaque content references, provenance references, classification, retention class, version monotonicity shape, and timestamp ordering. It does not authorize access, read referenced content, persist records, enforce retention, or guarantee deletion/revocation propagation. Those require accepted identity, storage, and retention contracts.
 
 ## Documentation
 
