@@ -21,3 +21,15 @@ aether-ai-database and aether-ai-security.
 - No implementation starts until the documentation and cross-repository contracts are reviewed.
 - Do not commit secrets, credentials, or real user data.
 - Keep retention, deletion, access control, and privacy behavior documented and tested before persistence features are enabled.
+
+## Repository documents
+
+- [Project specification](docs/PROJECT_SPEC.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Dependencies and contracts](docs/DEPENDENCIES_AND_CONTRACTS.md)
+- [Implementation plan](docs/IMPLEMENTATION_PLAN.md)
+- [Research and licenses](docs/RESEARCH_AND_LICENSES.md)
+- [Technical design](docs/TECHNICAL_DESIGN.md)
+- [Security review](docs/SECURITY_REVIEW.md)
+- [Engineering standard](docs/ENGINEERING_STANDARD.md)
+- [Work log](docs/WORKLOG.md)
