@@ -8,6 +8,13 @@ export class MemoryError extends Error {
 function isRecord(value) { return value !== null && typeof value === "object" && !Array.isArray(value); }
 function validId(value) { return typeof value === "string" && ID.test(value) && value.trim() === value; }
 function principalOk(value) { return isRecord(value) && validId(value.id) && validId(value.tenantId); }
+function validStoredMemory(value) {
+  return isRecord(value) && validId(value.id) && validId(value.tenantId) && validId(value.ownerId)
+    && SCOPES.has(value.scope) && validId(value.kind) && typeof value.content === "string"
+    && Number.isSafeInteger(value.createdAt) && Number.isSafeInteger(value.expiresAt)
+    && (value.deletedAt === null || Number.isSafeInteger(value.deletedAt))
+    && (value.sessionId === null || validId(value.sessionId));
+}
 
 export function createMemoryService({ store, authorize, clock = () => Date.now(), maxContentBytes = 65_536, maxRetentionMs = 30 * 24 * 60 * 60 * 1000 }) {
   const required = ["create", "get", "list", "delete"];
@@ -23,6 +30,7 @@ export function createMemoryService({ store, authorize, clock = () => Date.now()
   async function getActive(principal, memoryId) {
     let memory;
     try { memory = await store.get({ id: memoryId, tenantId: principal.tenantId }); } catch { throw new MemoryError("store_unavailable"); }
+    if (memory !== null && memory !== undefined && !validStoredMemory(memory)) throw new MemoryError("store_unavailable");
     if (!memory || memory.tenantId !== principal.tenantId || memory.ownerId !== principal.id || memory.deletedAt !== null || memory.expiresAt <= clock()) {
       throw new MemoryError("not_found", "Memory was not found");
     }
@@ -63,7 +71,7 @@ export function createMemoryService({ store, authorize, clock = () => Date.now()
       let records;
       try { records = await store.list({ tenantId: principal.tenantId, ownerId: principal.id, scope, sessionId: scope === "session" ? sessionId : null, limit }); }
       catch { throw new MemoryError("store_unavailable"); }
-      if (!Array.isArray(records)) throw new MemoryError("store_unavailable");
+      if (!Array.isArray(records) || records.some((memory) => !validStoredMemory(memory))) throw new MemoryError("store_unavailable");
       const now = clock();
       return Object.freeze(records.filter((memory) => memory.tenantId === principal.tenantId && memory.ownerId === principal.id && memory.scope === scope && memory.deletedAt === null && memory.expiresAt > now && (scope !== "session" || memory.sessionId === sessionId))
         .slice(0, limit).map((memory) => Object.freeze({ id: memory.id, scope: memory.scope, sessionId: memory.sessionId, kind: memory.kind, content: memory.content, createdAt: memory.createdAt, expiresAt: memory.expiresAt })));
