@@ -1,0 +1,10 @@
+{
+  "name": "@aether-ai/memory",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tenant- and user-scoped memory lifecycle with explicit retention.",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "exports": { ".": "./src/index.js" },
+  "scripts": { "test": "node --test", "check": "node --check src/index.js && node --check test/memory.test.js" }
+}
